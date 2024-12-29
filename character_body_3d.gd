@@ -39,22 +39,24 @@ func _input(event):
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		print("Mouse unlocked and visible.")
 
-	if event is InputEventKey and event.pressed and event.physical_keycode == KEY_F11:
-		DisplayServer.window_set_mode(
-			DisplayServer.WINDOW_MODE_FULLSCREEN
-			if DisplayServer.window_get_mode() != DisplayServer.WINDOW_MODE_FULLSCREEN
-			else DisplayServer.WINDOW_MODE_WINDOWED
-		)
-		print("Toggled fullscreen mode.")
+	if event.is_action_pressed(INTERACT_KEY) and interactable:
+		handle_interaction()
 
-	if event is InputEventJoypadMotion:
-		if event.axis == JOY_AXIS_RIGHT_X:
-			rotate_y(-event.axis_value * MOUSE_SENSITIVITY * 3)
-		elif event.axis == JOY_AXIS_RIGHT_Y:
-			rotation_x -= event.axis_value * MOUSE_SENSITIVITY * 3
-			rotation_x = clamp(rotation_x, deg_to_rad(-90), deg_to_rad(90))
-			if player_camera:
-				player_camera.rotation.x = rotation_x
+	if event.is_action_pressed(EXIT_KEY) and current_vehicle:
+		print("Attempting to exit vehicle...")
+		if current_vehicle.has_method("exit_jet"):
+			print("Exiting jet...")
+			current_vehicle.exit_jet()
+		elif current_vehicle.has_method("exit_car"):
+			print("Exiting car...")
+			current_vehicle.exit_car()
+		else:
+			print("Error: Current vehicle has no valid exit method.")
+		current_vehicle = null
+		exit_vehicle()
+
+	if event.is_action_pressed(RUN_KEY):
+		print("Running activated")
 
 func _physics_process(delta: float):
 	if current_vehicle:
@@ -81,20 +83,6 @@ func _physics_process(delta: float):
 
 	move_and_slide()
 
-	if Input.is_action_just_pressed(INTERACT_KEY):
-		if interactable:
-			if interactable.is_in_group("jets"):
-				interactable.enter_jet(self)
-				current_vehicle = interactable
-				player_camera.current = false
-				print("Entered vehicle and player camera disabled.")
-
-	if Input.is_action_just_pressed(EXIT_KEY) and current_vehicle:
-		print("Exiting vehicle...")
-		current_vehicle.exit_jet()
-		current_vehicle = null
-		exit_vehicle()
-
 func _on_body_entered(body):
 	if body.is_in_group("interactables"):
 		interactable = body
@@ -104,6 +92,20 @@ func _on_body_exited(body):
 	if interactable == body:
 		interactable = null
 		print("Interactable exited: ", body.name)
+
+func handle_interaction():
+	if interactable:
+		print("Handling interaction with: ", interactable.name)
+		if interactable.is_in_group("jets"):
+			interactable.enter_jet(self)
+			current_vehicle = interactable
+			player_camera.current = false
+			print("Entered jet and disabled player camera.")
+		elif interactable.is_in_group("cars"):
+			interactable.enter_car(self)
+			current_vehicle = interactable
+			player_camera.current = false
+			print("Entered car and disabled player camera.")
 
 func exit_vehicle():
 	current_vehicle = null  # Clear the reference to the vehicle

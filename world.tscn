@@ -18,7 +18,9 @@ material = SubResource("StandardMaterial3D_qr7sl")
 [sub_resource type="BoxShape3D" id="BoxShape3D_xv1v4"]
 
 [sub_resource type="Environment" id="Environment_biycj"]
-fog_light_color = Color(0.360938, 0.391916, 0.440609, 1)
+fog_enabled = true
+fog_light_color = Color(0.568854, 0, 0.104788, 1)
+volumetric_fog_enabled = true
 
 [node name="world" type="Node3D"]
 
