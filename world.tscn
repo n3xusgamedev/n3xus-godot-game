@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://jfkj08jfo1kv" path="res://jet.tscn" id="4_oox8p"]
 [ext_resource type="Script" path="res://node.gd" id="5_706cq"]
 [ext_resource type="PackedScene" uid="uid://cdtyy3m55y5aj" path="res://building2.tscn" id="6_o7ci1"]
-[ext_resource type="PackedScene" uid="uid://cch8atc711ur8" path="res://pause_menu.tscn" id="7_qsgms"]
+[ext_resource type="PackedScene" path="res://pause_menu.tscn" id="7_qsgms"]
 [ext_resource type="PackedScene" uid="uid://dfb4rwwclj67n" path="res://enemy_1.tscn" id="9_5858u"]
 [ext_resource type="AudioStream" uid="uid://fn1ulran8hv0" path="res://assets/a-calm-ambient-atmosphere-158464.mp3" id="10_67uk6"]
 
@@ -95,7 +95,7 @@ transform = Transform3D(1.14768, 0, 0, 0, 1, 0, 0, 0, 0.999998, -7.82995, 9.8536
 [node name="PauseMenu" parent="." instance=ExtResource("7_qsgms")]
 
 [node name="enemy_1" parent="." instance=ExtResource("9_5858u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.4712, 6.40838, 16.2643)
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 12.4712, 4.85862, 16.2643)
 
 [node name="SoundscapePlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("10_67uk6")
