@@ -1,8 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://ba52my3l3ndll"]
+[gd_scene load_steps=2 format=3 uid="uid://qwvu6a7gmtt0"]
 
 [ext_resource type="Script" path="res://settings_menu.gd" id="1_4beqd"]
 
 [node name="SettingsMenu" type="Control"]
+z_index = 2
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

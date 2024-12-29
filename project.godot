@@ -14,6 +14,7 @@ config/name="N3xus"
 config/version="0.0.1"
 run/main_scene="res://main_menu.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
+boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/image="res://assets/n3xus2.png"
 config/icon="res://assets/n3xus2.png"
 

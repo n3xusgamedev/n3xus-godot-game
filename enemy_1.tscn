@@ -30,7 +30,7 @@ material = SubResource("StandardMaterial3D_mit13")
 size = Vector3(1, 0.541992, 1.52301)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ujxvg"]
-size = Vector3(4.92822, 2.17102, 2.60547)
+size = Vector3(4.95044, 2.17102, 2.60547)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b518d"]
 albedo_color = Color(31.721, 23.387, 0.033, 1)
@@ -120,7 +120,7 @@ shape = SubResource("BoxShape3D_26y0v")
 [node name="Area3D" type="Area3D" parent="."]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0818188, 0.379716, 0.410297)
+transform = Transform3D(1.25877, 0, 0, 0, 1.43204, 0, 0, 0, 1.89759, 0.155735, 0.248306, -0.0159364)
 shape = SubResource("BoxShape3D_ujxvg")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
@@ -142,3 +142,6 @@ shape = SubResource("BoxShape3D_2nhqe")
 [node name="CollisionShape3D5" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.014623, 1.28018, 1.71707)
 shape = SubResource("BoxShape3D_yoiyl")
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_Area3D_body_entered"]
+[connection signal="body_exited" from="Area3D" to="." method="_on_Area3D_body_exited"]

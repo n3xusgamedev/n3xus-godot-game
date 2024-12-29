@@ -16,7 +16,7 @@ bg_color = Color(0, 0.470766, 0.0806161, 1)
 
 [node name="player" type="Node3D" groups=["Player"]]
 
-[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+[node name="CharacterBody3D" type="CharacterBody3D" parent="." groups=["Player"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0571446)
 script = ExtResource("1_0shmo")
 
@@ -50,5 +50,20 @@ offset_left = 28.0
 offset_top = 29.0
 offset_right = 253.0
 offset_bottom = 56.0
+theme_override_styles/background = SubResource("StyleBoxFlat_mk2hi")
+value = 100.0
+
+[node name="Label2" type="Label" parent="UI"]
+offset_left = 28.0
+offset_top = 66.0
+offset_right = 80.0
+offset_bottom = 89.0
+text = "Stamina"
+
+[node name="Stamina" type="ProgressBar" parent="UI"]
+offset_left = 28.0
+offset_top = 91.0
+offset_right = 253.0
+offset_bottom = 118.0
 theme_override_styles/background = SubResource("StyleBoxFlat_mk2hi")
 value = 100.0
