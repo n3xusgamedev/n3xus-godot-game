@@ -1,12 +1,13 @@
-[gd_scene load_steps=13 format=3 uid="uid://cs54d5davmc12"]
+[gd_scene load_steps=14 format=3 uid="uid://cs54d5davmc12"]
 
 [ext_resource type="Script" path="res://collision_shape_3d.gd" id="1_foyip"]
 [ext_resource type="PackedScene" uid="uid://b75wag510ge18" path="res://player.tscn" id="1_sr4ls"]
 [ext_resource type="PackedScene" uid="uid://dmsxo015tv6cn" path="res://car.tscn" id="2_6v0n3"]
 [ext_resource type="PackedScene" uid="uid://cyodwtrqt6gk0" path="res://building1.tscn" id="3_0hy2s"]
 [ext_resource type="PackedScene" uid="uid://jfkj08jfo1kv" path="res://jet.tscn" id="4_oox8p"]
+[ext_resource type="Script" path="res://node.gd" id="5_706cq"]
 [ext_resource type="PackedScene" uid="uid://cdtyy3m55y5aj" path="res://building2.tscn" id="6_o7ci1"]
-[ext_resource type="PackedScene" uid="uid://cch8atc711ur8" path="res://pause_menu.tscn" id="7_qsgms"]
+[ext_resource type="PackedScene" path="res://pause_menu.tscn" id="7_qsgms"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_4um53"]
 
@@ -20,8 +21,8 @@ material = SubResource("StandardMaterial3D_qr7sl")
 
 [sub_resource type="Environment" id="Environment_biycj"]
 fog_enabled = true
-fog_light_color = Color(0.654731, 0, 0.172739, 1)
 volumetric_fog_enabled = true
+adjustment_enabled = true
 
 [node name="world" type="Node3D"]
 
@@ -75,6 +76,9 @@ shadow_blur = 0.45
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_biycj")
+
+[node name="Node" type="Node" parent="WorldEnvironment"]
+script = ExtResource("5_706cq")
 
 [node name="Node3D9" parent="." instance=ExtResource("6_o7ci1")]
 transform = Transform3D(7.23087, 0, 0, 0, 15.6712, 0, 0, 0, 8.83815, -30.2204, 28.3588, 37.3422)
