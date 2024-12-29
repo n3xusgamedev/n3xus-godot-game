@@ -14,6 +14,11 @@ var interactable: Node = null
 var current_vehicle: Node = null
 @onready var player_camera: Camera3D = $MeshInstance3D/Camera3D
 
+# Joystick axis IDs for right stick
+const JOY_AXIS_RIGHT_X = 2  # Adjust based on your controller
+const JOY_AXIS_RIGHT_Y = 3  # Adjust based on your controller
+const DEADZONE = 0.1        # Deadzone to filter small movements
+
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	print("Player script ready. Mouse locked.")
@@ -52,6 +57,13 @@ func _input(event):
 		current_vehicle = null
 		exit_vehicle()
 
+	if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
+		# Toggle the mouse mode
+		if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
+			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)  # Show the cursor
+		else:
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)  # Capture the cursor
+
 func _physics_process(delta: float):
 	if current_vehicle:
 		return
@@ -78,12 +90,13 @@ func _physics_process(delta: float):
 	move_and_slide()
 
 	# Controller right stick look-around
-	var right_stick_x = Input.get_axis("right_stick_x", "deadzone")
-	var right_stick_y = Input.get_axis("right_stick_y", "deadzone")
+	var right_stick_x = Input.get_joy_axis(0, JOY_AXIS_RIGHT_X)  # `0` is the controller ID
+	var right_stick_y = Input.get_joy_axis(0, JOY_AXIS_RIGHT_Y)
 
-	if abs(right_stick_x) > 0.1:
+	# Apply deadzone and sensitivity
+	if abs(right_stick_x) > DEADZONE:
 		rotate_y(-right_stick_x * CONTROLLER_SENSITIVITY)
-	if abs(right_stick_y) > 0.1:
+	if abs(right_stick_y) > DEADZONE:
 		rotation_x -= right_stick_y * CONTROLLER_SENSITIVITY
 		rotation_x = clamp(rotation_x, deg_to_rad(-90), deg_to_rad(90))
 		if player_camera:
