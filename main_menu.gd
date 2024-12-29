@@ -85,13 +85,13 @@ func _input(event: InputEvent) -> void:
 		navigate_buttons(-1)
 	elif event.is_action_pressed("ui_accept"):
 		# Trigger the focused button's pressed signal
-		var focused = get_tree().focus_owner
+		var focused = get_viewport().get_focus_owner()
 		if focused and focused is Button:
 			focused.emit_signal("pressed")
 
 func navigate_buttons(direction: int) -> void:
 	# Get the currently focused button
-	var focused = get_tree().focus_owner
+	var focused = get_viewport().get_focus_owner()
 
 	# Find the next or previous button in the button container
 	var index = button_container.get_children().find(focused)
