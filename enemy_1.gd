@@ -18,6 +18,8 @@ var player: Node3D = null
 var patrolling_forward: bool = true
 var last_step_back_time: float = 0.0  # Tracks time since the last step-back action
 
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
+
 func _ready() -> void:
 	original_position = global_transform.origin
 	connect_signals()
@@ -25,6 +27,8 @@ func _ready() -> void:
 	print("Enemy initialized at: ", original_position)
 
 func _physics_process(delta: float) -> void:
+	apply_gravity(delta)
+
 	if is_chasing and player:
 		print("Chasing the player.")
 		chase_player(delta)
@@ -35,6 +39,16 @@ func _physics_process(delta: float) -> void:
 
 	if velocity.length() > 0.01:
 		rotate_toward_velocity(delta)
+
+	# Play walking animation if moving
+	if velocity.length() > 0:
+		animation_player.play("Walk")
+	else:
+		animation_player.stop()
+
+func apply_gravity(delta: float) -> void:
+	if not is_on_floor():
+		velocity.y += ProjectSettings.get_setting("physics/3d/default_gravity") * delta
 
 func patrol(delta: float) -> void:
 	if is_chasing:
@@ -110,6 +124,7 @@ func take_damage(amount: int) -> void:
 
 func die() -> void:
 	print("Enemy has died.")
+	animation_player.play("Die")
 	queue_free()
 
 # Signal handlers
