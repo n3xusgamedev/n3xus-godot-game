@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://cs54d5davmc12"]
+[gd_scene load_steps=16 format=3 uid="uid://cs54d5davmc12"]
 
 [ext_resource type="Script" path="res://collision_shape_3d.gd" id="1_foyip"]
 [ext_resource type="PackedScene" uid="uid://b75wag510ge18" path="res://player.tscn" id="1_sr4ls"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://cdtyy3m55y5aj" path="res://building2.tscn" id="6_o7ci1"]
 [ext_resource type="PackedScene" path="res://pause_menu.tscn" id="7_qsgms"]
 [ext_resource type="PackedScene" uid="uid://chfp65xu85ecx" path="res://enemy_1.tscn" id="9_5858u"]
+[ext_resource type="AudioStream" uid="uid://fn1ulran8hv0" path="res://assets/a-calm-ambient-atmosphere-158464.mp3" id="10_67uk6"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_4um53"]
 
@@ -96,4 +97,9 @@ transform = Transform3D(1.14768, 0, 0, 0, 1, 0, 0, 0, 0.999998, -7.82995, 9.8536
 [node name="PauseMenu" parent="." instance=ExtResource("7_qsgms")]
 
 [node name="enemy_1" parent="." instance=ExtResource("9_5858u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.89503, 6.40838, 16.2643)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.4712, 6.40838, 16.2643)
+
+[node name="SoundscapePlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("10_67uk6")
+autoplay = true
+bus = &"Music"

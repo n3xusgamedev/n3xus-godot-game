@@ -6,7 +6,7 @@ extends Control
 # Text to display
 var full_text: String = "N3xus"
 var glitch_characters: Array = ["@", "#", "$", "%", "&", "*", "!", "?"]
-var reveal_speed: float = 0.35  # Seconds between each character reveal
+var reveal_speed: float = 0.30  # Seconds between each character reveal
 
 func _enter_tree() -> void:
 	# Captures the mouse pointer at start

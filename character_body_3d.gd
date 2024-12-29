@@ -24,6 +24,11 @@ var pause_menu_instance: Node = null  # Reference to the loaded pause menu insta
 const PAUSE_MENU_PATH: String = "res://pause_menu_2.tscn"  # Hardcoded path to the pause menu scene
 var pause_menu_scene: PackedScene = preload(PAUSE_MENU_PATH)
 
+# Health properties
+var max_health: int = 100
+var health: int = max_health
+@onready var health_bar: ProgressBar = $UI/HealthBar  # Path to your health bar UI
+
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	print("Player script ready. Mouse locked.")
@@ -38,9 +43,14 @@ func _ready():
 	$Area3D.body_exited.connect(_on_body_exited)
 	print("Signals for Area3D connected.")
 
+	# Initialize health bar
+	if health_bar:
+		health_bar.max_value = max_health
+		health_bar.value = health
+		print("Health bar initialized.")
+
 func _input(event: InputEvent):
 	if event is InputEventMouseMotion:
-		# Handle mouse look-around
 		rotate_y(-event.relative.x * MOUSE_SENSITIVITY)
 		rotation_x -= event.relative.y * MOUSE_SENSITIVITY
 		rotation_x = clamp(rotation_x, deg_to_rad(-90), deg_to_rad(90))
@@ -164,4 +174,24 @@ func exit_vehicle():
 	player_camera.current = true  # Switch back to the player's camera
 	velocity = Vector3.ZERO  # Reset player velocity
 	print("Exited vehicle and player controls restored.")
-	
+
+# Health-related functions
+func take_damage(amount: int):
+	health -= amount
+	health = max(health, 0)  # Ensure health doesn't go below 0
+	if health_bar:
+		health_bar.value = health
+	print("Player took damage. Current health:", health)
+	if health <= 0:
+		handle_player_death()
+
+func heal(amount: int):
+	health += amount
+	health = min(health, max_health)  # Ensure health doesn't exceed max_health
+	if health_bar:
+		health_bar.value = health
+	print("Player healed. Current health:", health)
+
+func handle_player_death():
+	print("Player has died!")
+	# Add death handling logic, such as respawn or game over
