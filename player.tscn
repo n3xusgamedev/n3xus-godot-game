@@ -11,7 +11,7 @@
 radius = 0.71098
 height = 2.37159
 
-[node name="player" type="Node3D"]
+[node name="player" type="Node3D" groups=["Player"]]
 
 [node name="CharacterBody3D" type="CharacterBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0571446)
