@@ -1,0 +1,113 @@
+extends CharacterBody3D
+
+const SPEED = 5.0
+const RUN_SPEED = 8.0
+const JUMP_VELOCITY = 4.5
+@export var MOUSE_SENSITIVITY = 0.01
+@export var INTERACT_KEY: StringName = "ui_accept"
+@export var EXIT_KEY: StringName = "ui_cancel"
+@export var RUN_KEY: StringName = "ui_run"
+
+var rotation_x: float = 0.0
+var interactable: Node = null
+var current_vehicle: Node = null
+@onready var player_camera: Camera3D = $MeshInstance3D/Camera3D
+
+func _ready():
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	print("Player script ready. Mouse locked.")
+
+	if player_camera:
+		player_camera.current = true
+		print("Player camera initialized.")
+	else:
+		print("Error: Player camera not found.")
+
+	$Area3D.body_entered.connect(_on_body_entered)
+	$Area3D.body_exited.connect(_on_body_exited)
+	print("Signals for Area3D connected.")
+
+func _input(event):
+	if event is InputEventMouseMotion:
+		rotate_y(-event.relative.x * MOUSE_SENSITIVITY)
+		rotation_x -= event.relative.y * MOUSE_SENSITIVITY
+		rotation_x = clamp(rotation_x, deg_to_rad(-90), deg_to_rad(90))
+		if player_camera:
+			player_camera.rotation.x = rotation_x
+
+	if event is InputEventKey and event.pressed and event.physical_keycode == KEY_ESCAPE:
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		print("Mouse unlocked and visible.")
+
+	if event is InputEventKey and event.pressed and event.physical_keycode == KEY_F11:
+		DisplayServer.window_set_mode(
+			DisplayServer.WINDOW_MODE_FULLSCREEN
+			if DisplayServer.window_get_mode() != DisplayServer.WINDOW_MODE_FULLSCREEN
+			else DisplayServer.WINDOW_MODE_WINDOWED
+		)
+		print("Toggled fullscreen mode.")
+
+	if event is InputEventJoypadMotion:
+		if event.axis == JOY_AXIS_RIGHT_X:
+			rotate_y(-event.axis_value * MOUSE_SENSITIVITY * 3)
+		elif event.axis == JOY_AXIS_RIGHT_Y:
+			rotation_x -= event.axis_value * MOUSE_SENSITIVITY * 3
+			rotation_x = clamp(rotation_x, deg_to_rad(-90), deg_to_rad(90))
+			if player_camera:
+				player_camera.rotation.x = rotation_x
+
+func _physics_process(delta: float):
+	if current_vehicle:
+		return
+
+	if not is_on_floor():
+		velocity += get_gravity() * delta
+
+	if Input.is_action_just_pressed("jump") and is_on_floor():
+		velocity.y = JUMP_VELOCITY
+
+	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
+	var speed = SPEED
+	if Input.is_action_pressed(RUN_KEY):
+		speed = RUN_SPEED
+
+	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	if direction:
+		velocity.x = direction.x * speed
+		velocity.z = direction.z * speed
+	else:
+		velocity.x = move_toward(velocity.x, 0, speed)
+		velocity.z = move_toward(velocity.z, 0, speed)
+
+	move_and_slide()
+
+	if Input.is_action_just_pressed(INTERACT_KEY):
+		if interactable:
+			if interactable.is_in_group("jets"):
+				interactable.enter_jet(self)
+				current_vehicle = interactable
+				player_camera.current = false
+				print("Entered vehicle and player camera disabled.")
+
+	if Input.is_action_just_pressed(EXIT_KEY) and current_vehicle:
+		print("Exiting vehicle...")
+		current_vehicle.exit_jet()
+		current_vehicle = null
+		exit_vehicle()
+
+func _on_body_entered(body):
+	if body.is_in_group("interactables"):
+		interactable = body
+		print("Interactable detected: ", body.name)
+
+func _on_body_exited(body):
+	if interactable == body:
+		interactable = null
+		print("Interactable exited: ", body.name)
+
+func exit_vehicle():
+	current_vehicle = null  # Clear the reference to the vehicle
+	set_physics_process(true)  # Reactivate player controls
+	player_camera.current = true  # Switch back to the player's camera
+	velocity = Vector3.ZERO  # Reset player velocity
+	print("Exited vehicle and player controls restored.")
