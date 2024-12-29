@@ -39,7 +39,7 @@ func _physics_process(delta):
 func handle_input(delta):
 	var input_direction = 0.0
 
-	# Forward and backward using R2 and L2
+	# Forward and backward using R2 and L2 (Joystick)
 	var forward_input = Input.get_joy_axis(0, JOY_AXIS_R2)  # Controller ID 0
 	var backward_input = Input.get_joy_axis(0, JOY_AXIS_L2)
 
@@ -47,6 +47,12 @@ func handle_input(delta):
 		input_direction += forward_input
 	if backward_input > DEADZONE:
 		input_direction -= backward_input
+
+	# Forward and backward using keyboard
+	if Input.is_action_pressed("move_forward"):
+		input_direction += 1.0
+	if Input.is_action_pressed("move_backward"):
+		input_direction -= 1.0
 
 	# Apply acceleration or braking
 	if input_direction != 0:
@@ -57,10 +63,16 @@ func handle_input(delta):
 	if velocity.length() > max_speed:
 		velocity = velocity.normalized() * max_speed
 
-	# Turning using left stick
+	# Turning using left stick (Joystick)
 	var turn_input = Input.get_joy_axis(0, JOY_AXIS_LEFT_X)
 	if abs(turn_input) > DEADZONE:
 		rotate_y(-turn_input * turn_speed * delta)
+
+	# Turning using keyboard
+	if Input.is_action_pressed("move_left"):
+		rotate_y(turn_speed * delta)
+	if Input.is_action_pressed("move_right"):
+		rotate_y(-turn_speed * delta)
 
 	# Handle exiting the car
 	if Input.is_action_just_pressed(exit_key):

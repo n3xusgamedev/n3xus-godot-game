@@ -19,6 +19,11 @@ const JOY_AXIS_RIGHT_X = 2  # Horizontal look
 const JOY_AXIS_RIGHT_Y = 3  # Vertical look
 const DEADZONE = 0.1        # Deadzone for joystick
 
+var is_paused: bool = false
+var pause_menu_instance: Node = null  # Reference to the loaded pause menu instance
+const PAUSE_MENU_PATH: String = "res://pause_menu_2.tscn"  # Hardcoded path to the pause menu scene
+var pause_menu_scene: PackedScene = preload(PAUSE_MENU_PATH)
+
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	print("Player script ready. Mouse locked.")
@@ -58,15 +63,19 @@ func _input(event: InputEvent):
 		current_vehicle = null
 		exit_vehicle()
 
-	if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
-		# Toggle the mouse mode
-		if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
-			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)  # Show the cursor
-		else:
-			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)  # Capture the cursor
+	# Updated pause menu handling
+	if (event is InputEventKey and event.pressed and event.keycode == KEY_P) or \
+	   (event is InputEventJoypadButton and event.pressed and event.button_index == JOY_BUTTON_START):
+		toggle_pause_menu()
+	elif event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
+		if not is_paused:  # Only handle ESC for mouse capture when not paused
+			if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
+				Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+			else:
+				Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _physics_process(delta: float):
-	if current_vehicle:
+	if current_vehicle or is_paused:
 		return
 
 	if not is_on_floor():
@@ -91,7 +100,7 @@ func _physics_process(delta: float):
 	move_and_slide()
 
 	# Controller right stick look-around
-	var right_stick_x = Input.get_joy_axis(0, JOY_AXIS_RIGHT_X)  # 0 is the controller ID
+	var right_stick_x = Input.get_joy_axis(0, JOY_AXIS_RIGHT_X)
 	var right_stick_y = Input.get_joy_axis(0, JOY_AXIS_RIGHT_Y)
 
 	# Apply deadzone and sensitivity
@@ -102,6 +111,28 @@ func _physics_process(delta: float):
 		rotation_x = clamp(rotation_x, deg_to_rad(-90), deg_to_rad(90))
 		if player_camera:
 			player_camera.rotation.x = rotation_x
+
+func toggle_pause_menu():
+	is_paused = not is_paused
+	get_tree().paused = is_paused
+
+	if is_paused:
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)  # Show cursor when paused
+		if pause_menu_scene and not pause_menu_instance:
+			pause_menu_instance = pause_menu_scene.instantiate()
+			
+			if pause_menu_instance is Control:
+				print("Adding pause menu to the root.")
+				get_tree().root.get_child(0).add_child(pause_menu_instance)
+				print("Pause menu loaded and shown.")
+			else:
+				print("Error: Pause menu is not a Control node.")
+	else:
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)  # Hide cursor when unpaused
+		if pause_menu_instance:
+			pause_menu_instance.queue_free()
+			pause_menu_instance = null
+			print("Pause menu hidden.")
 
 func _on_body_entered(body):
 	if body.is_in_group("interactables"):
@@ -133,3 +164,4 @@ func exit_vehicle():
 	player_camera.current = true  # Switch back to the player's camera
 	velocity = Vector3.ZERO  # Reset player velocity
 	print("Exited vehicle and player controls restored.")
+	

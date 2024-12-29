@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://cs54d5davmc12"]
+[gd_scene load_steps=13 format=3 uid="uid://cs54d5davmc12"]
 
 [ext_resource type="Script" path="res://collision_shape_3d.gd" id="1_foyip"]
 [ext_resource type="PackedScene" uid="uid://b75wag510ge18" path="res://player.tscn" id="1_sr4ls"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://cyodwtrqt6gk0" path="res://building1.tscn" id="3_0hy2s"]
 [ext_resource type="PackedScene" uid="uid://jfkj08jfo1kv" path="res://jet.tscn" id="4_oox8p"]
 [ext_resource type="PackedScene" uid="uid://cdtyy3m55y5aj" path="res://building2.tscn" id="6_o7ci1"]
+[ext_resource type="PackedScene" uid="uid://cch8atc711ur8" path="res://pause_menu.tscn" id="7_qsgms"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_4um53"]
 
@@ -86,3 +87,5 @@ transform = Transform3D(5.26511, 0, -6.05788, 0, 15.6712, 0, 4.95622, 0, 6.43544
 
 [node name="Node3D12" parent="." groups=["interactibles"] instance=ExtResource("2_6v0n3")]
 transform = Transform3D(1.14768, 0, 0, 0, 1, 0, 0, 0, 0.999998, -7.82995, 9.85367, 1.11393)
+
+[node name="PauseMenu" parent="." instance=ExtResource("7_qsgms")]
