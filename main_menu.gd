@@ -44,6 +44,10 @@ func _ready() -> void:
 	button_container.visible = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
+	# Focus on the first button
+	if button_container.get_child_count() > 0:
+		button_container.get_child(0).grab_focus()
+
 func animate_title() -> void:
 	if title_label == null:
 		printerr("Error: TitleLabel is null.")
@@ -71,6 +75,34 @@ func animate_title() -> void:
 func randomize_glitch() -> String:
 	# Generate a random glitch character
 	return glitch_characters[randi() % glitch_characters.size()]
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_down"):
+		# Focus on the next button
+		navigate_buttons(1)
+	elif event.is_action_pressed("ui_up"):
+		# Focus on the previous button
+		navigate_buttons(-1)
+	elif event.is_action_pressed("ui_accept"):
+		# Trigger the focused button's pressed signal
+		var focused = get_tree().focus_owner
+		if focused and focused is Button:
+			focused.emit_signal("pressed")
+
+func navigate_buttons(direction: int) -> void:
+	# Get the currently focused button
+	var focused = get_tree().focus_owner
+
+	# Find the next or previous button in the button container
+	var index = button_container.get_children().find(focused)
+	var next_index = (index + direction) % button_container.get_child_count()
+	if next_index < 0:
+		next_index = button_container.get_child_count() - 1  # Wrap around
+
+	# Focus on the next button
+	var next_button = button_container.get_child(next_index)
+	if next_button and next_button is Button:
+		next_button.grab_focus()
 
 func _on_start_game_pressed() -> void:
 	print("Starting game...")
