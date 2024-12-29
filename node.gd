@@ -10,8 +10,11 @@ extends Node  # or Node3D if appropriate
 # How much to boost the brightness during a flash
 @export var flash_brightness_boost: float = 1.5
 
+# Path to the thunder sound effect
+@export var thunder_sound_path: String = "res://assets/thunder-sound.mp3"
+
 @onready var world_env: WorldEnvironment = $".."
-# ^ Adjust path if your WorldEnvironment is in a different location in your scene.
+@onready var audio_player: AudioStreamPlayer = AudioStreamPlayer.new()  # Dynamically created AudioStreamPlayer
 
 var original_brightness: float = 1.0
 
@@ -26,6 +29,14 @@ func _ready() -> void:
 
 	# Store the original environment brightness
 	original_brightness = world_env.environment.adjustment_brightness
+
+	# Set up the AudioStreamPlayer for the thunder sound
+	add_child(audio_player)
+	var thunder_sound = load(thunder_sound_path) as AudioStream
+	if thunder_sound:
+		audio_player.stream = thunder_sound
+	else:
+		printerr("Failed to load thunder sound: %s" % thunder_sound_path)
 
 	# Start random lightning loop
 	randomize()  # Seeds random number generation
@@ -44,6 +55,10 @@ func start_lightning_loop() -> void:
 func trigger_lightning_flash() -> void:
 	# Increase environment brightness by some amount
 	world_env.environment.adjustment_brightness = original_brightness + flash_brightness_boost
+
+	# Play the thunder sound
+	if audio_player.stream:
+		audio_player.play()
 
 	# Wait for the flash duration
 	await get_tree().create_timer(flash_duration).timeout
