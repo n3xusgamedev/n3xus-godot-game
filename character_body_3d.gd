@@ -4,6 +4,7 @@ const SPEED = 5.0
 const RUN_SPEED = 8.0
 const JUMP_VELOCITY = 4.5
 @export var MOUSE_SENSITIVITY = 0.01
+@export var CONTROLLER_SENSITIVITY = 0.02
 @export var INTERACT_KEY: StringName = "ui_accept"
 @export var EXIT_KEY: StringName = "ui_cancel"
 @export var RUN_KEY: StringName = "ui_run"
@@ -35,10 +36,6 @@ func _input(event):
 		if player_camera:
 			player_camera.rotation.x = rotation_x
 
-	if event is InputEventKey and event.pressed and event.physical_keycode == KEY_ESCAPE:
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-		print("Mouse unlocked and visible.")
-
 	if event.is_action_pressed(INTERACT_KEY) and interactable:
 		handle_interaction()
 
@@ -54,9 +51,6 @@ func _input(event):
 			print("Error: Current vehicle has no valid exit method.")
 		current_vehicle = null
 		exit_vehicle()
-
-	if event.is_action_pressed(RUN_KEY):
-		print("Running activated")
 
 func _physics_process(delta: float):
 	if current_vehicle:
@@ -82,6 +76,18 @@ func _physics_process(delta: float):
 		velocity.z = move_toward(velocity.z, 0, speed)
 
 	move_and_slide()
+
+	# Controller right stick look-around
+	var right_stick_x = Input.get_axis("right_stick_x", "deadzone")
+	var right_stick_y = Input.get_axis("right_stick_y", "deadzone")
+
+	if abs(right_stick_x) > 0.1:
+		rotate_y(-right_stick_x * CONTROLLER_SENSITIVITY)
+	if abs(right_stick_y) > 0.1:
+		rotation_x -= right_stick_y * CONTROLLER_SENSITIVITY
+		rotation_x = clamp(rotation_x, deg_to_rad(-90), deg_to_rad(90))
+		if player_camera:
+			player_camera.rotation.x = rotation_x
 
 func _on_body_entered(body):
 	if body.is_in_group("interactables"):
