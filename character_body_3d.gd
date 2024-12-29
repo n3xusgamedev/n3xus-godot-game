@@ -4,7 +4,7 @@ const SPEED = 5.0
 const RUN_SPEED = 8.0
 const JUMP_VELOCITY = 4.5
 @export var MOUSE_SENSITIVITY = 0.01
-@export var CONTROLLER_SENSITIVITY = 0.05  # Increased sensitivity for smoother and faster movement
+@export var CONTROLLER_SENSITIVITY = 0.1  # Increased sensitivity for controller camera look-around
 @export var INTERACT_KEY: StringName = "ui_accept"
 @export var EXIT_KEY: StringName = "ui_cancel"
 @export var RUN_KEY: StringName = "ui_run"
@@ -15,9 +15,9 @@ var current_vehicle: Node = null
 @onready var player_camera: Camera3D = $MeshInstance3D/Camera3D
 
 # Joystick axis IDs for right stick
-const JOY_AXIS_RIGHT_X = 2  # Adjust based on your controller
-const JOY_AXIS_RIGHT_Y = 3  # Adjust based on your controller
-const DEADZONE = 0.1        # Deadzone to filter small movements
+const JOY_AXIS_RIGHT_X = 2  # Horizontal look
+const JOY_AXIS_RIGHT_Y = 3  # Vertical look
+const DEADZONE = 0.1        # Deadzone for joystick
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -33,18 +33,19 @@ func _ready():
 	$Area3D.body_exited.connect(_on_body_exited)
 	print("Signals for Area3D connected.")
 
-func _input(event):
+func _input(event: InputEvent):
 	if event is InputEventMouseMotion:
+		# Handle mouse look-around
 		rotate_y(-event.relative.x * MOUSE_SENSITIVITY)
 		rotation_x -= event.relative.y * MOUSE_SENSITIVITY
 		rotation_x = clamp(rotation_x, deg_to_rad(-90), deg_to_rad(90))
 		if player_camera:
 			player_camera.rotation.x = rotation_x
 
-	if event.is_action_pressed(INTERACT_KEY) and interactable:
+	if Input.is_action_just_pressed(INTERACT_KEY) and interactable:
 		handle_interaction()
 
-	if event.is_action_pressed(EXIT_KEY) and current_vehicle:
+	if Input.is_action_just_pressed(EXIT_KEY) and current_vehicle:
 		print("Attempting to exit vehicle...")
 		if current_vehicle.has_method("exit_jet"):
 			print("Exiting jet...")
@@ -57,7 +58,7 @@ func _input(event):
 		current_vehicle = null
 		exit_vehicle()
 
-	if event.is_action_pressed(KEY_ESCAPE):
+	if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
 		# Toggle the mouse mode
 		if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)  # Show the cursor
@@ -90,14 +91,14 @@ func _physics_process(delta: float):
 	move_and_slide()
 
 	# Controller right stick look-around
-	var right_stick_x = Input.get_joy_axis(0, JOY_AXIS_RIGHT_X)  # `0` is the controller ID
+	var right_stick_x = Input.get_joy_axis(0, JOY_AXIS_RIGHT_X)  # 0 is the controller ID
 	var right_stick_y = Input.get_joy_axis(0, JOY_AXIS_RIGHT_Y)
 
 	# Apply deadzone and sensitivity
 	if abs(right_stick_x) > DEADZONE:
-		rotate_y(-right_stick_x * CONTROLLER_SENSITIVITY)  # Increased sensitivity multiplier
+		rotate_y(-right_stick_x * CONTROLLER_SENSITIVITY)
 	if abs(right_stick_y) > DEADZONE:
-		rotation_x -= right_stick_y * CONTROLLER_SENSITIVITY  # Increased sensitivity multiplier
+		rotation_x -= right_stick_y * CONTROLLER_SENSITIVITY
 		rotation_x = clamp(rotation_x, deg_to_rad(-90), deg_to_rad(90))
 		if player_camera:
 			player_camera.rotation.x = rotation_x
