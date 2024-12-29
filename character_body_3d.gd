@@ -4,7 +4,7 @@ const SPEED = 5.0
 const RUN_SPEED = 8.0
 const JUMP_VELOCITY = 4.5
 @export var MOUSE_SENSITIVITY = 0.01
-@export var CONTROLLER_SENSITIVITY = 0.02
+@export var CONTROLLER_SENSITIVITY = 0.05  # Increased sensitivity for smoother and faster movement
 @export var INTERACT_KEY: StringName = "ui_accept"
 @export var EXIT_KEY: StringName = "ui_cancel"
 @export var RUN_KEY: StringName = "ui_run"
@@ -57,7 +57,7 @@ func _input(event):
 		current_vehicle = null
 		exit_vehicle()
 
-	if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
+	if event.is_action_pressed(KEY_ESCAPE):
 		# Toggle the mouse mode
 		if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)  # Show the cursor
@@ -95,9 +95,9 @@ func _physics_process(delta: float):
 
 	# Apply deadzone and sensitivity
 	if abs(right_stick_x) > DEADZONE:
-		rotate_y(-right_stick_x * CONTROLLER_SENSITIVITY)
+		rotate_y(-right_stick_x * CONTROLLER_SENSITIVITY)  # Increased sensitivity multiplier
 	if abs(right_stick_y) > DEADZONE:
-		rotation_x -= right_stick_y * CONTROLLER_SENSITIVITY
+		rotation_x -= right_stick_y * CONTROLLER_SENSITIVITY  # Increased sensitivity multiplier
 		rotation_x = clamp(rotation_x, deg_to_rad(-90), deg_to_rad(90))
 		if player_camera:
 			player_camera.rotation.x = rotation_x
