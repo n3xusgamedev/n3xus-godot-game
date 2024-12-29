@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://dfb4rwwclj67n"]
+[gd_scene load_steps=22 format=3 uid="uid://dfb4rwwclj67n"]
 
 [ext_resource type="Script" path="res://enemy_1.gd" id="1_vj41x"]
 
@@ -50,6 +50,51 @@ size = Vector3(0.343018, 1.51868, 0.289062)
 [sub_resource type="BoxShape3D" id="BoxShape3D_yoiyl"]
 size = Vector3(0.642334, 0.248962, 0.664551)
 
+[sub_resource type="Animation" id="Animation_bmp8e"]
+length = 4.0
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D/Leg 1")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1.03333, 1, 0, 0.473622, 0, 1.96667, 1, 0, -0.0572609, 0)
+tracks/1/type = "position_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MeshInstance3D/Leg 2")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(1.96667, 1, 0.839012, 0.164644, -0.383986, 3, 1, 0.839012, 0.713705, -0.383986, 4, 1, 0.839012, 0.228383, -0.383986)
+tracks/2/type = "position_3d"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("MeshInstance3D/Leg 3")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = PackedFloat32Array(1, 1, 0, 0, 0, 1.96667, 1, 0, 0.423592, 0, 3, 1, 0, 0.0397425, 0)
+tracks/3/type = "position_3d"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("MeshInstance3D/Leg 4")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = PackedFloat32Array(1, 1, 0, 0, 0, 1.96667, 1, 0, 0.423592, 0, 3, 1, 0, 0.0397425, 0)
+tracks/4/type = "position_3d"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("MeshInstance3D/Leg 5")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = PackedFloat32Array(1.96667, 1, 0, 0, 0, 3, 1, 0, 0.549061, 0, 4, 1, 0, 0.0175283, 0)
+tracks/5/type = "position_3d"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("MeshInstance3D/Leg 6")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = PackedFloat32Array(0.0333333, 1, 0, 0.429604, 0, 1, 1, 0, 0.903226, 0, 1.96667, 1, 0, 0.372343, 0)
+
 [sub_resource type="Animation" id="Animation_ntslr"]
 resource_name = "Walk"
 length = 3.0
@@ -82,34 +127,57 @@ tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = PackedFloat32Array()
 
-[sub_resource type="Animation" id="Animation_bmp8e"]
-length = 0.001
+[sub_resource type="Animation" id="Animation_1vnrx"]
+resource_name = "Walk2"
+length = 4.0
 tracks/0/type = "position_3d"
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/path = NodePath("MeshInstance3D/Leg 1")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0)
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1.03333, 1, 0, 0.473622, 0, 1.96667, 1, 0, -0.0572609, 0)
 tracks/1/type = "position_3d"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("MeshInstance3D/Leg 6")
+tracks/1/path = NodePath("MeshInstance3D/Leg 2")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
-tracks/1/keys = PackedFloat32Array(0, 1, 0, 0, 0)
+tracks/1/keys = PackedFloat32Array(1.96667, 1, 0.839012, 0.164644, -0.383986, 3, 1, 0.839012, 0.713705, -0.383986, 4, 1, 0.839012, 0.228383, -0.383986)
 tracks/2/type = "position_3d"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("MeshInstance3D/Leg 2")
+tracks/2/path = NodePath("MeshInstance3D/Leg 3")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
-tracks/2/keys = PackedFloat32Array(0, 1, 0.839012, 0.164644, -0.383986)
+tracks/2/keys = PackedFloat32Array(1, 1, 0, 0, 0, 1.96667, 1, 0, 0.423592, 0, 3, 1, 0, 0.0397425, 0)
+tracks/3/type = "position_3d"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("MeshInstance3D/Leg 4")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = PackedFloat32Array(1, 1, 0, 0, 0, 1.96667, 1, 0, 0.423592, 0, 3, 1, 0, 0.0397425, 0)
+tracks/4/type = "position_3d"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("MeshInstance3D/Leg 5")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = PackedFloat32Array(1.96667, 1, 0, 0, 0, 3, 1, 0, 0.549061, 0, 4, 1, 0, 0.0175283, 0)
+tracks/5/type = "position_3d"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("MeshInstance3D/Leg 6")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = PackedFloat32Array(0.0333333, 1, 0, 0.429604, 0, 1, 1, 0, 0.903226, 0, 1.96667, 1, 0, 0.372343, 0)
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_4dey7"]
 _data = {
 "RESET": SubResource("Animation_bmp8e"),
-"Walk": SubResource("Animation_ntslr")
+"Walk": SubResource("Animation_ntslr"),
+"Walk2": SubResource("Animation_1vnrx")
 }
 
 [node name="enemy_1" type="CharacterBody3D"]
@@ -134,7 +202,7 @@ mesh = SubResource("BoxMesh_5c06j")
 skeleton = NodePath("../..")
 
 [node name="Leg 6" type="Node3D" parent="MeshInstance3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+transform = Transform3D(1, 0, 1.42109e-14, 0, 1, 0, 0, 0, 1, 0, 0.429604, 0)
 
 [node name="MeshInstance3D9" type="MeshInstance3D" parent="MeshInstance3D/Leg 6"]
 transform = Transform3D(1.08051, -0.22283, -5.04677e-09, -1.44198, -0.166971, 0, -9.4461e-08, 1.94804e-08, -0.0577283, -0.956084, -0.221356, -0.386858)
@@ -146,22 +214,6 @@ transform = Transform3D(0.789077, 0.250328, -5.04677e-09, 1.61993, -0.121936, 0,
 mesh = SubResource("BoxMesh_5c06j")
 skeleton = NodePath("../..")
 
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="MeshInstance3D"]
-transform = Transform3D(-1.08051, 0.22283, 0, -1.44198, -0.166971, 0, 0, 0, 0.0577283, 0.839012, 0.164644, -0.383986)
-mesh = SubResource("BoxMesh_5c06j")
-
-[node name="MeshInstance3D4" type="MeshInstance3D" parent="MeshInstance3D"]
-transform = Transform3D(-0.789076, -0.250328, 0, 1.61993, -0.121936, 0, 0, 0, 0.0577283, 1.67294, 0.19468, -0.383986)
-mesh = SubResource("BoxMesh_5c06j")
-
-[node name="MeshInstance3D5" type="MeshInstance3D" parent="MeshInstance3D"]
-transform = Transform3D(-1.08051, 0.22283, 0, -1.44198, -0.166971, 0, 0, 0, 0.0577283, 0.839012, 0.164644, -0.00400849)
-mesh = SubResource("BoxMesh_5c06j")
-
-[node name="MeshInstance3D6" type="MeshInstance3D" parent="MeshInstance3D"]
-transform = Transform3D(-0.789076, -0.250328, 0, 1.61993, -0.121936, 0, 0, 0, 0.0577283, 1.67294, 0.19468, -0.00400849)
-mesh = SubResource("BoxMesh_5c06j")
-
 [node name="MeshInstance3D13" type="MeshInstance3D" parent="MeshInstance3D"]
 transform = Transform3D(0.370292, 0, 0, 0, 0.908428, -0.103601, 0, 0.418041, 0.225132, 0, 1.35367, 0.643982)
 mesh = SubResource("CylinderMesh_y36r3")
@@ -171,7 +223,7 @@ transform = Transform3D(0.59807, 0, 0, 0, 0.0353988, -0.265262, 0, 0.186078, 0.0
 mesh = SubResource("CylinderMesh_d76ov")
 
 [node name="Leg 2" type="Node3D" parent="MeshInstance3D"]
-transform = Transform3D(-1.08051, 0.22283, 0, -1.44198, -0.166971, 0, 0, 0, 0.0577283, 0.839012, 0.164644, -0.383986)
+transform = Transform3D(-1.08051, 0.22283, -8.88178e-16, -1.44198, -0.166971, 0, 1.42109e-14, 1.77636e-15, 0.0577283, 0.839012, 0.164644, -0.383986)
 
 [node name="MeshInstance3D7" type="MeshInstance3D" parent="MeshInstance3D/Leg 2"]
 transform = Transform3D(0.280833, 0.148311, 1.67952e-09, 6.2108, -0.280833, -1.45045e-08, -1.6363e-06, 3.3745e-07, -1, 0.597391, -5.15913, 13.9725)
@@ -183,7 +235,21 @@ transform = Transform3D(-0.982046, -0.0291522, 1.67952e-09, -1.22081, 0.982044, 
 mesh = SubResource("BoxMesh_5c06j")
 skeleton = NodePath("../..")
 
+[node name="Leg 3" type="Node3D" parent="MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="MeshInstance3D/Leg 3"]
+transform = Transform3D(-1.08051, 0.22283, 0, -1.44198, -0.166971, 0, 7.10543e-15, 8.88178e-16, 0.0577283, 0.839012, 0.164644, -0.00400849)
+mesh = SubResource("BoxMesh_5c06j")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="MeshInstance3D/Leg 3"]
+transform = Transform3D(-0.789076, -0.250328, 0, 1.61993, -0.121936, 0, 0, -8.88178e-16, 0.0577283, 1.67294, 0.19468, -0.00400849)
+mesh = SubResource("BoxMesh_5c06j")
+skeleton = NodePath("../..")
+
 [node name="Leg 4" type="Node3D" parent="MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="MeshInstance3D11" type="MeshInstance3D" parent="MeshInstance3D/Leg 4"]
 transform = Transform3D(1.08051, -0.22283, -5.04677e-09, -1.44198, -0.166971, 0, -9.4461e-08, 1.94804e-08, -0.0577283, -0.956084, 0.164644, -0.000133486)
@@ -192,6 +258,19 @@ skeleton = NodePath("../..")
 
 [node name="MeshInstance3D12" type="MeshInstance3D" parent="MeshInstance3D/Leg 4"]
 transform = Transform3D(0.789077, 0.250328, -5.04677e-09, 1.61993, -0.121936, 0, -6.89832e-08, -2.18844e-08, -0.0577283, -1.79002, 0.19468, -0.000133408)
+mesh = SubResource("BoxMesh_5c06j")
+skeleton = NodePath("../..")
+
+[node name="Leg 5" type="Node3D" parent="MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="MeshInstance3D/Leg 5"]
+transform = Transform3D(-1.08051, 0.22283, 0, -1.44198, -0.166971, 0, 7.10543e-15, 8.88178e-16, 0.0577283, 0.839012, 0.164644, -0.383986)
+mesh = SubResource("BoxMesh_5c06j")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="MeshInstance3D/Leg 5"]
+transform = Transform3D(-0.789076, -0.250328, 0, 1.61993, -0.121936, 0, 0, -8.88178e-16, 0.0577283, 1.67294, 0.19468, -0.383986)
 mesh = SubResource("BoxMesh_5c06j")
 skeleton = NodePath("../..")
 

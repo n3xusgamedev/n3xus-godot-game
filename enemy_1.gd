@@ -42,7 +42,7 @@ func _physics_process(delta: float) -> void:
 
 	# Play walking animation if moving
 	if velocity.length() > 0:
-		animation_player.play("Walk")
+		animation_player.play("Walk2")
 	else:
 		animation_player.stop()
 
