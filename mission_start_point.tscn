@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://ccpi70otyr0s4"]
+
+[ext_resource type="Script" path="res://mission_start_point.gd" id="1_gk8og"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sakxl"]
+albedo_color = Color(0.0941176, 0.454902, 0.196078, 1)
+emission_enabled = true
+emission = Color(0, 0.792157, 0.505882, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_dhx51"]
+material = SubResource("StandardMaterial3D_sakxl")
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_fg8mv"]
+radius = 3.0001
+
+[node name="MissionStartPoint" type="Node3D"]
+script = ExtResource("1_gk8og")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CylinderMesh_dhx51")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("CylinderShape3D_fg8mv")
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.41937, 0)
+text = "Press 'E' to start Mission 1"

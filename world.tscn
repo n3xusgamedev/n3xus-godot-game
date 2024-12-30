@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://cs54d5davmc12"]
+[gd_scene load_steps=17 format=3 uid="uid://cs54d5davmc12"]
 
 [ext_resource type="Script" path="res://collision_shape_3d.gd" id="1_foyip"]
 [ext_resource type="PackedScene" uid="uid://b75wag510ge18" path="res://player.tscn" id="1_sr4ls"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://cyodwtrqt6gk0" path="res://building1.tscn" id="3_0hy2s"]
 [ext_resource type="PackedScene" uid="uid://jfkj08jfo1kv" path="res://jet.tscn" id="4_oox8p"]
 [ext_resource type="Script" path="res://node.gd" id="5_706cq"]
+[ext_resource type="PackedScene" uid="uid://ccpi70otyr0s4" path="res://mission_start_point.tscn" id="5_ilj71"]
 [ext_resource type="PackedScene" uid="uid://cdtyy3m55y5aj" path="res://building2.tscn" id="6_o7ci1"]
 [ext_resource type="PackedScene" path="res://pause_menu.tscn" id="7_qsgms"]
 [ext_resource type="PackedScene" uid="uid://dfb4rwwclj67n" path="res://enemy_1.tscn" id="9_5858u"]
@@ -48,6 +49,9 @@ transform = Transform3D(-1.49874, 0, 2.24428, 0, 6.36239, 0, -1.3108, 0, -2.5660
 
 [node name="jet" parent="." instance=ExtResource("4_oox8p")]
 transform = Transform3D(1, 0.000312825, -0.000558376, -0.00031214, 0.999999, 0.00122135, 0.000558759, -0.00122117, 0.999999, 5.81372, 6.37178, 6.12462)
+
+[node name="MissionStartPoint" parent="." instance=ExtResource("5_ilj71")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.41269, -6.71416)
 
 [node name="Node3D2" parent="." instance=ExtResource("3_0hy2s")]
 transform = Transform3D(0.672623, 0, 3.20862, 0, 6.36239, 0, -1.87403, 0, 1.15163, -10.1195, 10.0881, -37.6792)
