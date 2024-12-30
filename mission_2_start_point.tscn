@@ -1,11 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://ccpi70otyr0s4"]
+[gd_scene load_steps=5 format=3 uid="uid://e7a5t4swdokf"]
 
-[ext_resource type="Script" path="res://mission_2_start_point.gd" id="1_bv4en"]
+[ext_resource type="Script" path="res://mission_start_point.gd" id="1_gc1ob"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sakxl"]
-albedo_color = Color(0.0941176, 0.454902, 0.196078, 1)
+albedo_color = Color(0.714875, 0, 0.179924, 1)
 emission_enabled = true
-emission = Color(0, 0.792157, 0.505882, 1)
+emission = Color(0.571719, 0, 0.0384931, 1)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_dhx51"]
 material = SubResource("StandardMaterial3D_sakxl")
@@ -14,7 +14,9 @@ material = SubResource("StandardMaterial3D_sakxl")
 radius = 3.0001
 
 [node name="MissionStartPoint" type="Node3D" groups=["mission_start_points"]]
-script = ExtResource("1_bv4en")
+script = ExtResource("1_gc1ob")
+mission_name = "Mission 2"
+mission_description = "Find and eliminate 5 spiders"
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("CylinderMesh_dhx51")
@@ -26,7 +28,7 @@ shape = SubResource("CylinderShape3D_fg8mv")
 
 [node name="Label3D" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.41937, 0)
-text = "Press 'E' to start Mission 1"
+text = "Press 'E' to start Mission 2"
 
 [node name="UI" type="Control" parent="."]
 layout_mode = 3

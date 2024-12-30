@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://cs54d5davmc12"]
+[gd_scene load_steps=18 format=3 uid="uid://cs54d5davmc12"]
 
 [ext_resource type="Script" path="res://collision_shape_3d.gd" id="1_foyip"]
 [ext_resource type="PackedScene" uid="uid://b75wag510ge18" path="res://player.tscn" id="1_sr4ls"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://cch8atc711ur8" path="res://pause_menu.tscn" id="7_qsgms"]
 [ext_resource type="PackedScene" uid="uid://dfb4rwwclj67n" path="res://enemy_1.tscn" id="9_5858u"]
 [ext_resource type="AudioStream" uid="uid://fn1ulran8hv0" path="res://assets/a-calm-ambient-atmosphere-158464.mp3" id="10_67uk6"]
+[ext_resource type="PackedScene" uid="uid://e7a5t4swdokf" path="res://mission_2_start_point.tscn" id="12_xivbd"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_4um53"]
 
@@ -3208,3 +3209,6 @@ transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 94.057
 
 [node name="enemy_34" parent="." instance=ExtResource("9_5858u")]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 137.323, 4.51426, -251.587)
+
+[node name="MissionStartPoint2" parent="." instance=ExtResource("12_xivbd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.45017, 5.39469, -5.66159)
