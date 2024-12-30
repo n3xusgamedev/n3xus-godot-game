@@ -13,7 +13,7 @@ material = SubResource("StandardMaterial3D_sakxl")
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_fg8mv"]
 radius = 3.0001
 
-[node name="MissionStartPoint" type="Node3D"]
+[node name="MissionStartPoint" type="Node3D" groups=["mission_start_points"]]
 script = ExtResource("1_gk8og")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
@@ -27,3 +27,16 @@ shape = SubResource("CylinderShape3D_fg8mv")
 [node name="Label3D" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.41937, 0)
 text = "Press 'E' to start Mission 1"
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="MissionObjectiveLabel" type="Label" parent="UI"]
+layout_mode = 0
+offset_left = 1526.0
+offset_top = 40.0
+offset_right = 1566.0
+offset_bottom = 63.0

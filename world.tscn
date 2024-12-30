@@ -8,7 +8,7 @@
 [ext_resource type="Script" path="res://node.gd" id="5_706cq"]
 [ext_resource type="PackedScene" uid="uid://ccpi70otyr0s4" path="res://mission_start_point.tscn" id="5_ilj71"]
 [ext_resource type="PackedScene" uid="uid://cdtyy3m55y5aj" path="res://building2.tscn" id="6_o7ci1"]
-[ext_resource type="PackedScene" path="res://pause_menu.tscn" id="7_qsgms"]
+[ext_resource type="PackedScene" uid="uid://cch8atc711ur8" path="res://pause_menu.tscn" id="7_qsgms"]
 [ext_resource type="PackedScene" uid="uid://dfb4rwwclj67n" path="res://enemy_1.tscn" id="9_5858u"]
 [ext_resource type="AudioStream" uid="uid://fn1ulran8hv0" path="res://assets/a-calm-ambient-atmosphere-158464.mp3" id="10_67uk6"]
 

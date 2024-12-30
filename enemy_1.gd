@@ -237,8 +237,18 @@ func take_damage(amount: int) -> void:
 
 func die() -> void:
 	print("Enemy has died.")
-	animation_player.play("Die")
+	
+	# Notify the mission system
+	if get_tree().has_group("mission_start_points"):
+		for mission in get_tree().get_nodes_in_group("mission_start_points"):
+			if mission.has_method("on_enemy_killed"):
+				mission.on_enemy_killed()
+
+	# Play death animation and free the enemy
+	if animation_player and animation_player.has_animation("Die"):
+		animation_player.play("Die")
 	queue_free()
+
 
 func _on_Area3D_body_entered(body: Node3D) -> void:
 	if body.is_in_group("Player"):
