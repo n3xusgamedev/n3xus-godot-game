@@ -1,18 +1,21 @@
 extends CharacterBody3D
 
-@export var patrol_speed: float = 3.0          # Speed while patrolling
-@export var chase_speed: float = 6.0           # Speed while chasing the player
-@export var patrol_distance: float = 30.0      # Max distance to patrol from the starting position
-@export var detection_radius: float = 15.0     # Detection radius for the player
-@export var lose_player_distance: float = 20.0 # Distance at which the enemy loses the player
-@export var rotation_speed: float = 3.0        # Speed for smooth rotation
-@export var step_back_interval: float = 3.0    # Time between step-back actions when chasing
-@export var step_back_distance: float = 2.0    # Distance to step back
-@export var health: int = 3                    # Enemy's health
-@export var random_patrol_variance: float = 45.0  # Maximum angle variance in degrees for random patrol
-@export var endpoint_rotation_time: float = 1.0   # Time taken to rotate at patrol endpoints
-@export var chase_rotation_speed: float = 5.0     # How fast to rotate towards player while chasing
-@export var gravity_multiplier: float = 2.0       # Adjust gravity strength
+@export var patrol_speed: float = 3.0
+@export var chase_speed: float = 6.0
+@export var patrol_distance: float = 30.0
+@export var detection_radius: float = 15.0
+@export var lose_player_distance: float = 20.0
+@export var rotation_speed: float = 3.0
+@export var step_back_interval: float = 3.0
+@export var step_back_distance: float = 2.0
+@export var health: int = 3
+@export var random_patrol_variance: float = 45.0
+@export var endpoint_rotation_time: float = 1.0
+@export var chase_rotation_speed: float = 5.0
+@export var gravity_multiplier: float = 2.0
+# New damage-related exports
+@export var damage: int = 10
+@export var attack_cooldown: float = 1.0
 
 # Internal state variables
 var original_position: Vector3
@@ -27,6 +30,9 @@ var target_rotation: Basis
 var current_patrol_target: Vector3
 var rng = RandomNumberGenerator.new()
 var gravity: float = 0.0
+# New attack-related variables
+var can_attack: bool = true
+var attack_timer: float = 0.0
 
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 
@@ -40,6 +46,13 @@ func _ready() -> void:
 	print("Enemy initialized at: ", original_position)
 
 func _physics_process(delta: float) -> void:
+	# Handle attack cooldown
+	if not can_attack:
+		attack_timer += delta
+		if attack_timer >= attack_cooldown:
+			can_attack = true
+			attack_timer = 0.0
+	
 	# Store current horizontal velocity
 	var horizontal_velocity = Vector3(velocity.x, 0, velocity.z)
 	
@@ -47,7 +60,6 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y -= gravity * gravity_multiplier * delta
 	else:
-		# When on floor, apply a small downward force to maintain contact
 		velocity.y = -1.0
 	
 	# Handle movement based on state
@@ -56,10 +68,15 @@ func _physics_process(delta: float) -> void:
 		horizontal_velocity = Vector3.ZERO
 	elif is_chasing and player:
 		chase_player(delta)
-		horizontal_velocity = velocity * Vector3(1, 0, 1)  # Preserve horizontal movement
+		horizontal_velocity = velocity * Vector3(1, 0, 1)
+		
+		# Check for attack range when chasing
+		var distance_to_player = global_position.distance_to(player.global_position)
+		if distance_to_player < 2.0 and can_attack:  # Attack range of 2 units
+			attack_player()
 	else:
 		patrol(delta)
-		horizontal_velocity = velocity * Vector3(1, 0, 1)  # Preserve horizontal movement
+		horizontal_velocity = velocity * Vector3(1, 0, 1)
 	
 	# Recombine horizontal movement with vertical velocity
 	velocity = Vector3(horizontal_velocity.x, velocity.y, horizontal_velocity.z)
@@ -67,12 +84,42 @@ func _physics_process(delta: float) -> void:
 	# Apply movement
 	move_and_slide()
 	
+	# Check for collisions that might trigger damage
+	for i in get_slide_collision_count():
+		var collision = get_slide_collision(i)
+		var collider = collision.get_collider()
+		if collider == player and can_attack:
+			attack_player()
+	
 	# Handle rotation if moving
 	if horizontal_velocity.length() > 0.1:
 		rotate_towards_direction(horizontal_velocity.normalized(), delta)
 	
 	update_animation()
 
+func can_attack_player() -> bool:
+	if not player:
+		return false
+	if not player.has_method("take_damage"):
+		return false
+	# Check if player health is greater than 0
+	# Note: This assumes the player has a 'health' property that's accessible
+	if player.health <= 0:
+		return false
+	return true
+
+# Update the attack_player function
+func attack_player() -> void:
+	if can_attack and can_attack_player():
+		print("Enemy attacking player!")
+		player.take_damage(damage)
+		can_attack = false
+		attack_timer = 0.0
+		# Optionally play attack animation here
+		if animation_player and animation_player.has_animation("Attack"):
+			animation_player.play("Attack")
+
+# Rest of the existing functions remain the same...
 func patrol(delta: float) -> void:
 	if is_rotating_at_endpoint:
 		return
@@ -80,7 +127,6 @@ func patrol(delta: float) -> void:
 	var target_direction = (current_patrol_target - global_transform.origin).normalized()
 	var target_velocity = target_direction * patrol_speed
 	
-	# Only apply to horizontal components
 	velocity.x = target_velocity.x
 	velocity.z = target_velocity.z
 	
@@ -97,19 +143,16 @@ func chase_player(delta: float) -> void:
 	var distance_to_player = dir_to_player.length()
 	dir_to_player = dir_to_player.normalized()
 	
-	# Set horizontal velocity for movement
 	var target_velocity = dir_to_player * chase_speed
 	velocity.x = target_velocity.x
 	velocity.z = target_velocity.z
 	
-	# Rotate towards player
 	rotate_towards_direction(dir_to_player, delta, chase_rotation_speed)
 	
 	if distance_to_player > lose_player_distance:
 		is_chasing = false
 		player = null
 		set_new_patrol_target()
-		print("Player out of range. Resuming patrol.")
 		return
 
 	if distance_to_player < 1.0:

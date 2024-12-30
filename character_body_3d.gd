@@ -1,10 +1,11 @@
 extends CharacterBody3D
 
+# Constants
 const SPEED = 5.0
 const RUN_SPEED = 8.0
 const JUMP_VELOCITY = 4.5
 @export var MOUSE_SENSITIVITY = 0.01
-@export var CONTROLLER_SENSITIVITY = 0.1  # Increased sensitivity for controller camera look-around
+@export var CONTROLLER_SENSITIVITY = 0.1
 @export var INTERACT_KEY: StringName = "ui_accept"
 @export var EXIT_KEY: StringName = "ui_cancel"
 @export var RUN_KEY: StringName = "ui_run"
@@ -15,19 +16,19 @@ var current_vehicle: Node = null
 @onready var player_camera: Camera3D = $MeshInstance3D/Camera3D
 
 # Joystick axis IDs for right stick
-const JOY_AXIS_RIGHT_X = 2  # Horizontal look
-const JOY_AXIS_RIGHT_Y = 3  # Vertical look
-const DEADZONE = 0.1        # Deadzone for joystick
+const JOY_AXIS_RIGHT_X = 2
+const JOY_AXIS_RIGHT_Y = 3
+const DEADZONE = 0.1
 
 var is_paused: bool = false
-var pause_menu_instance: Node = null  # Reference to the loaded pause menu instance
-const PAUSE_MENU_PATH: String = "res://pause_menu_2.tscn"  # Hardcoded path to the pause menu scene
+var pause_menu_instance: Node = null
+const PAUSE_MENU_PATH: String = "res://pause_menu_2.tscn"
 var pause_menu_scene: PackedScene = preload(PAUSE_MENU_PATH)
 
 # Health properties
 var max_health: int = 100
 var health: int = max_health
-@onready var health_bar: ProgressBar = $UI/HealthBar  # Path to your health bar UI
+@onready var health_bar: ProgressBar = $"../UI/HealthBar"
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -44,10 +45,14 @@ func _ready():
 	print("Signals for Area3D connected.")
 
 	# Initialize health bar
-	if health_bar:
-		health_bar.max_value = max_health
-		health_bar.value = health
-		print("Health bar initialized.")
+	if not health_bar:
+		push_error("Health bar node not found at path: UI/HealthBar")
+		print("Health bar node not found at path: UI/HealthBar")
+		return
+
+	health_bar.max_value = max_health
+	health_bar.value = health
+	print("Health bar initialized. Max health:", max_health, ", Current health:", health)
 
 func _input(event: InputEvent):
 	if event is InputEventMouseMotion:
@@ -73,12 +78,12 @@ func _input(event: InputEvent):
 		current_vehicle = null
 		exit_vehicle()
 
-	# Updated pause menu handling
+	# Pause menu handling
 	if (event is InputEventKey and event.pressed and event.keycode == KEY_P) or \
 	   (event is InputEventJoypadButton and event.pressed and event.button_index == JOY_BUTTON_START):
 		toggle_pause_menu()
 	elif event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
-		if not is_paused:  # Only handle ESC for mouse capture when not paused
+		if not is_paused:
 			if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 				Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 			else:
@@ -127,10 +132,9 @@ func toggle_pause_menu():
 	get_tree().paused = is_paused
 
 	if is_paused:
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)  # Show cursor when paused
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		if pause_menu_scene and not pause_menu_instance:
 			pause_menu_instance = pause_menu_scene.instantiate()
-			
 			if pause_menu_instance is Control:
 				print("Adding pause menu to the root.")
 				get_tree().root.get_child(0).add_child(pause_menu_instance)
@@ -138,7 +142,7 @@ func toggle_pause_menu():
 			else:
 				print("Error: Pause menu is not a Control node.")
 	else:
-		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)  # Hide cursor when unpaused
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		if pause_menu_instance:
 			pause_menu_instance.queue_free()
 			pause_menu_instance = null
@@ -147,16 +151,16 @@ func toggle_pause_menu():
 func _on_body_entered(body):
 	if body.is_in_group("interactables"):
 		interactable = body
-		print("Interactable detected: ", body.name)
+		print("Interactable detected:", body.name)
 
 func _on_body_exited(body):
 	if interactable == body:
 		interactable = null
-		print("Interactable exited: ", body.name)
+		print("Interactable exited:", body.name)
 
 func handle_interaction():
 	if interactable:
-		print("Handling interaction with: ", interactable.name)
+		print("Handling interaction with:", interactable.name)
 		if interactable.is_in_group("jets"):
 			interactable.enter_jet(self)
 			current_vehicle = interactable
@@ -169,29 +173,51 @@ func handle_interaction():
 			print("Entered car and disabled player camera.")
 
 func exit_vehicle():
-	current_vehicle = null  # Clear the reference to the vehicle
-	set_physics_process(true)  # Reactivate player controls
-	player_camera.current = true  # Switch back to the player's camera
-	velocity = Vector3.ZERO  # Reset player velocity
+	current_vehicle = null
+	set_physics_process(true)
+	player_camera.current = true
+	velocity = Vector3.ZERO
 	print("Exited vehicle and player controls restored.")
 
 # Health-related functions
 func take_damage(amount: int):
+	if health <= 0:
+		return
+
 	health -= amount
-	health = max(health, 0)  # Ensure health doesn't go below 0
+	health = max(health, 0)
+
 	if health_bar:
 		health_bar.value = health
+		print("Health bar updated. Value:", health)
+	else:
+		push_error("Health bar not found when updating damage!")
+		print("Warning: Health bar not found when updating damage!")
+
 	print("Player took damage. Current health:", health)
+
 	if health <= 0:
 		handle_player_death()
 
 func heal(amount: int):
 	health += amount
-	health = min(health, max_health)  # Ensure health doesn't exceed max_health
+	health = min(health, max_health)
+
 	if health_bar:
 		health_bar.value = health
+		print("Health bar updated. Value:", health)
+	else:
+		push_error("Health bar not found when updating healing!")
+		print("Warning: Health bar not found when updating healing!")
+
 	print("Player healed. Current health:", health)
 
 func handle_player_death():
 	print("Player has died!")
-	# Add death handling logic, such as respawn or game over
+	set_physics_process(false)
+	set_process_input(false)
+
+	await get_tree().create_timer(1.5).timeout
+
+	get_tree().reload_current_scene()
+	print("Reloading world scene...")
