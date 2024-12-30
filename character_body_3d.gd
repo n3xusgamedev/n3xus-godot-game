@@ -9,6 +9,7 @@ const JUMP_VELOCITY = 4.5
 @export var INTERACT_KEY: StringName = "ui_accept"
 @export var EXIT_KEY: StringName = "ui_cancel"
 @export var RUN_KEY: StringName = "ui_run"
+@export var SHOOT_KEY: StringName = "ui_shoot"
 
 var rotation_x: float = 0.0
 var interactable: Node = null
@@ -28,7 +29,11 @@ var pause_menu_scene: PackedScene = preload(PAUSE_MENU_PATH)
 # Health properties
 var max_health: int = 100
 var health: int = max_health
-@onready var health_bar: ProgressBar = $"../UI/HealthBar"
+@onready var health_bar: ProgressBar = $UI/HealthBar
+
+# Weapon properties
+@export var projectile_scene: PackedScene = preload("res://projectile.tscn")
+@export var shoot_speed: float = 20.0
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -77,6 +82,9 @@ func _input(event: InputEvent):
 			print("Error: Current vehicle has no valid exit method.")
 		current_vehicle = null
 		exit_vehicle()
+
+	if Input.is_action_just_pressed(SHOOT_KEY):
+		shoot_projectile()
 
 	# Pause menu handling
 	if (event is InputEventKey and event.pressed and event.keycode == KEY_P) or \
@@ -221,3 +229,24 @@ func handle_player_death():
 
 	get_tree().reload_current_scene()
 	print("Reloading world scene...")
+
+# Shooting functions
+func shoot_projectile():
+	if not projectile_scene:
+		push_error("Projectile scene not assigned!")
+		print("Error: No projectile scene assigned.")
+		return
+
+	var projectile = projectile_scene.instantiate()
+
+	# Ensure projectile spawns in front of the player camera
+	var spawn_offset = player_camera.global_transform.origin - player_camera.global_transform.basis.z * 1.5
+	projectile.global_transform.origin = spawn_offset
+
+	# Set the direction and velocity
+	var direction = -player_camera.global_transform.basis.z
+	projectile.velocity = direction * shoot_speed
+
+	# Add the projectile to the scene
+	get_tree().root.add_child(projectile)
+	print("Projectile fired at position:", projectile.global_transform.origin)
