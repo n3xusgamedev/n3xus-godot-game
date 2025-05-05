@@ -33,7 +33,7 @@ N3xus is a 3D action-adventure game built with Godot Engine 4.3. The game featur
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/n3xus-godot-game.git
+   git clone https://github.com/n3xusgamedev/n3xus-godot-game.git
    ```
    or download and extract the ZIP file
 
@@ -46,6 +46,37 @@ N3xus is a 3D action-adventure game built with Godot Engine 4.3. The game featur
 
 - From the Godot editor, press F5 or click the "Play" button in the top-right corner
 - Alternatively, export the project for your target platform through Project > Export
+
+### Development Setup
+
+1. **Editor Settings:**
+   - Go to Editor > Editor Settings
+   - Under Interface > Theme, select "Dark" for optimal visibility of the code
+   - Enable "Auto-save" under General > Saving
+
+2. **Project Configuration:**
+   - Check Project > Project Settings to review existing configurations
+   - Ensure "Forward+" rendering mode is selected under Rendering > Renderer
+   - Input map settings are already configured but can be modified under Input Map
+
+3. **Working with GDScript:**
+   - Enable static typing by adding type hints to your variables
+   - Follow the existing code structure for consistency
+   - Use the built-in documentation (Help > Search) for GDScript reference
+
+4. **Scene Organization:**
+   - Main scenes are located in the root directory
+   - Prefab-like scenes (reusable objects) are also in the root
+   - Assets are organized in the `assets/` folder
+
+5. **Debugging Tips:**
+   - Use `print()` statements for debugging (already used throughout the codebase)
+   - Enable "Visible Collision Shapes" under Debug > Visible Collision Shapes when testing physics
+   - The Remote tab provides runtime inspection of nodes
+
+6. **Version Control:**
+   - Avoid committing the `.godot/` directory except for essential files
+   - Use the `.gitignore` file to exclude temporary and generated files
 
 ## Controls
 
@@ -109,6 +140,8 @@ The game is built using Godot's native GDScript language and utilizes:
 - Game Engine: [Godot Engine](https://godotengine.org/)
 - Font: Transformers Movie Font
 - Audio: Ambient atmosphere and sound effects
+- Lead Developer: Matteo
+- Assistant Developer: Joe
 
 ## License
 
